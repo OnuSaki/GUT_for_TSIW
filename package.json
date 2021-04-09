@@ -1,0 +1,28 @@
+{
+  "name": "gut_for_tsiw",
+  "version": "1.0.0",
+  "description": "pw2 project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OnuSaki/GUT_for_TSIW.git"
+  },
+  "author": "Jorge Martins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OnuSaki/GUT_for_TSIW/issues"
+  },
+  "homepage": "https://github.com/OnuSaki/GUT_for_TSIW#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
