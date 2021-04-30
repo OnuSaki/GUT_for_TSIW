@@ -17,6 +17,12 @@ router.route('/')
     .get(usersController.getAllUsers)
     .post(usersController.createUser)
 
+router.route('/usertypes')
+    .get(usersController.getUserTypes)
+
+router.route('/banned')
+    .get(usersController.getBannedTypes)
+
 router.route('/:userId')
     .delete(usersController.deleteUser)
 

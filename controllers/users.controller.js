@@ -64,4 +64,28 @@ exports.deleteUser = (req, res) => {
             message: err.message || 'Some error ocurred while trying to delete user.'
         })
     })
-}
+};
+
+exports.getUserTypes = (req, res) => {
+    User_types.findAll()
+    .then(data => {
+        res.status(200).json(data);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving tutorials."
+        });
+    })
+};
+
+exports.getBannedTypes = (req, res) => {
+    User_banned.findAll()
+    .then(data => {
+        res.status(200).json(data);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving tutorials."
+        });
+    })
+};
