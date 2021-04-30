@@ -13,6 +13,13 @@ router.use((req, res, next) => {
     next()
 })
 
+router.route('/')
+    .get(usersController.getAllUsers)
+    .post(usersController.createUser)
+
+router.route('/:userId')
+    .delete(usersController.deleteUser)
+
 router.all('*', function (req, res) {
     res.status(404).json({
         message: 'TUTORIALS: what???'

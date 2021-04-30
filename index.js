@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
     });
 });
 
-app.use('/', require('./routes/users.routes'));
+app.use('/users', require('./routes/users.routes'));
 
 app.get('*', function(req, res) {
     res.status(404).json({message: 'WHAAT??'});
