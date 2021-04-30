@@ -2,7 +2,7 @@ const express = require('express');
 
 let router = express.Router();
 
-const usersController = require('../controllers/users.controller');
+const toolsController = require('../controllers/tools.controller');
 
 router.use((req, res, next) => {
     const start = Date.now();
@@ -14,15 +14,11 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(usersController.getAllUsers)
-    .post(usersController.createUser)
-
-router.route('/:userId')
-    .delete(usersController.deleteUser)
+    .get(toolsController.getAllTools)
 
 router.all('*', function (req, res) {
     res.status(404).json({
-        message: 'Users: what???'
+        message: 'Tools: what???'
     });
 })
 
