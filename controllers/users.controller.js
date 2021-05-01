@@ -1,25 +1,30 @@
+// Get database info
 const db = require("../models/db.js");
 
+// Call database tables
 const Users = db.users;
 const User_types = db.user_types;
 const User_banned = db.user_banned;
 
+// Sequelize operator
 const {
     Op
 } = require('sequelize');
 
+// Function used to get all users
 exports.getAllUsers = (req, res) => {
     Users.findAll()
-    .then(data => {
-        res.status(200).json(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving tutorials."
-        });
-    })
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving tutorials."
+            });
+        })
 };
 
+// Function used to create a new user
 exports.createUser = (req, res) => {
     Users.create(req.body)
         .then(data => {
@@ -27,7 +32,7 @@ exports.createUser = (req, res) => {
                 message: "New User created.",
                 location: "/users/" + data.user_id
             });
-            
+
         })
         .catch(err => {
             // Tutorial model as validation for the title column (not null)
@@ -42,50 +47,84 @@ exports.createUser = (req, res) => {
         });
 };
 
+// Function used to delete a user based on his id
 exports.deleteUser = (req, res) => {
     Users.destroy({
-        where: {
-            user_id: req.params.userId
-        }
-    })
-    .then(num => {
-        if (num == 0) {
-            res.status(200).json({
-                message: `No User with id: ${req.params.userId} was found on the database.`
-            });
-            return;
-        }
-        res.status(200).json({
-            message: "User deleted with success."
-        });
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || 'Some error ocurred while trying to delete user.'
+            where: {
+                user_id: req.params.userId
+            }
         })
-    })
+        .then(num => {
+            if (num == 0) {
+                res.status(200).json({
+                    message: `No User with id: ${req.params.userId} was found on the database.`
+                });
+                return;
+            }
+            res.status(200).json({
+                message: "User deleted with success."
+            });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || 'Some error ocurred while trying to delete user.'
+            })
+        })
 };
 
+// Function used to update a user based on his id
+exports.updateUser = (req, res) => {
+    Users.update({
+            user_name: req.body.user_name,
+            user_email: req.body.user_email,
+            user_password: req.body.user_password,
+            user_type_id: req.body.user_type_id,
+            banned_id: req.body.banned_id
+        }, {
+            where: {
+                user_id: req.params.userId
+            }
+        })
+        .then(data => {
+            if (data[0] === 0) {
+                res.status(200).json({
+                    message: "No User was found with this id."
+                })
+                return;
+            }
+            res.status(200).json({
+                message: "User updated with success!"
+            })
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error ocurred while updating User."
+            })
+        });
+}
+
+// Function to get all user types (admin, professor and student)
 exports.getUserTypes = (req, res) => {
     User_types.findAll()
-    .then(data => {
-        res.status(200).json(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving tutorials."
-        });
-    })
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving tutorials."
+            });
+        })
 };
 
+// Function to get all states the users can be (normal, banned and unbanned)
 exports.getBannedTypes = (req, res) => {
     User_banned.findAll()
-    .then(data => {
-        res.status(200).json(data);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving tutorials."
-        });
-    })
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving tutorials."
+            });
+        })
 };

@@ -1,9 +1,13 @@
+// Call express
 const express = require('express');
 
+// Call express router
 let router = express.Router();
 
+// Get the users controller file
 const usersController = require('../controllers/users.controller');
 
+// Function used to determine the time that it takes to make a request
 router.use((req, res, next) => {
     const start = Date.now();
     res.on("finish", () => {
@@ -13,23 +17,30 @@ router.use((req, res, next) => {
     next()
 })
 
+// Routes 127.1.0.0:8080/users/
 router.route('/')
     .get(usersController.getAllUsers)
     .post(usersController.createUser)
 
+// Routes 127.1.0.0:8080/users/usertypes
 router.route('/usertypes')
     .get(usersController.getUserTypes)
 
+// Routes 127.1.0.0:8080/users/banned
 router.route('/banned')
     .get(usersController.getBannedTypes)
 
+// Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
 router.route('/:userId')
     .delete(usersController.deleteUser)
+    .put(usersController.updateUser)
 
+// Route that responds to any other request that is not accounted
 router.all('*', function (req, res) {
     res.status(404).json({
         message: 'Users: what???'
     });
 })
 
+// Export routes router
 module.exports = router;
