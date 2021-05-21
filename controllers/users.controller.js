@@ -1,10 +1,8 @@
 // Get database info
 const db = require("../models/db.js");
 
-// Call database tables
+// Call database table
 const Users = db.users;
-const User_types = db.user_types;
-const User_banned = db.user_banned;
 
 // Sequelize operator
 const {
@@ -102,29 +100,3 @@ exports.updateUser = (req, res) => {
             })
         });
 }
-
-// Function to get all user types (admin, professor and student)
-exports.getUserTypes = (req, res) => {
-    User_types.findAll()
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        })
-};
-
-// Function to get all states the users can be (normal, banned and unbanned)
-exports.getBannedTypes = (req, res) => {
-    User_banned.findAll()
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        })
-};

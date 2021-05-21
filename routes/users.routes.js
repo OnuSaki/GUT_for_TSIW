@@ -22,14 +22,6 @@ router.route('/')
     .get(usersController.getAllUsers)
     .post(usersController.createUser)
 
-// Routes 127.1.0.0:8080/users/usertypes
-router.route('/usertypes')
-    .get(usersController.getUserTypes)
-
-// Routes 127.1.0.0:8080/users/banned
-router.route('/banned')
-    .get(usersController.getBannedTypes)
-
 // Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
 router.route('/:userId')
     .delete(usersController.deleteUser)
