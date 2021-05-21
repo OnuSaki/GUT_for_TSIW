@@ -20,12 +20,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        tool_state_id: {    // Foreign key provided from the table Tool_states that determines if the tool is published or deleted
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Tool_states',
-                key: 'tool_state_id'
-            }
+        tool_state: {    // Determines if the tool is published or deleted
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         timestamps: false

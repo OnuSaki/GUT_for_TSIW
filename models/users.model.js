@@ -27,19 +27,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        user_type_id: { // Foreign key that provides the type of user
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'User_types',
-                key: 'user_type_id'
-            }
+        user_type: { // User type (e.g. admin, professor, student)
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        banned_id: {    // Foreign key that provides if the user is banned or if he is able to enter the app
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'User_banned',
-                key: 'banned_id'
-            }
+        is_banned: {    // Validation if the user is banned
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         timestamps: false

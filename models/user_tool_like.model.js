@@ -24,12 +24,9 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'tool_id'
             }
         },
-        tool_like_id: {  // Foreign key that determines the type of apreciation the user gave
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Tool_likes',
-                key: 'tool_like_id'
-            }
+        like_desc: {  // Determines if the user gave a like or a deslike
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         timestamps: false
