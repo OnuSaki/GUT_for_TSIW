@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        tool_state: {    // Determines if the tool is published or deleted
+        tool_state_id: {    // Determines if the tool is published or deleted
             type: DataTypes.STRING,
             allowNull: false
         }

@@ -26,7 +26,7 @@ exports.signin = async (req, res) => {
         if (
             !passwordIsValid
             // req.body.user_password != user.user_password
-            ) {
+        ) {
             return res.status(401).json({
                 accessToken: null,
                 message: "Invalid Password!"
@@ -35,7 +35,7 @@ exports.signin = async (req, res) => {
 
         // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
         const token = jwt.sign({
-            id: user.id
+            id: user.user_id
         }, config.secret, {
             expiresIn: 86400 // 24 hours
         });
@@ -81,10 +81,10 @@ exports.signup = async (req, res) => {
             user_name: req.body.user_name,
             user_email: req.body.user_email,
             user_password: bcrypt.hashSync(req.body.user_password, 8), // generates hash to password
-            user_type_id: 3,
+            user_type_id: 1,
             banned_id: 1
         });
-        
+
         return res.json({
             message: "User was registered successfully!"
         });
@@ -93,4 +93,45 @@ exports.signup = async (req, res) => {
             message: err.message
         });
     };
-}
+};
+
+exports.verifyToken = (req, res, next) => {
+    let token = req.headers["x-access-token"];
+    if (!token) {
+        return res.status(403).send({
+            message: "No token provided!"
+        });
+    }
+    // verify request token given the JWT secret key
+    jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({
+                message: "Unauthorized!"
+            });
+        }
+        req.loggedUserId = decoded.id; // save user ID for future verifications
+        next();
+    });
+};
+
+
+exports.isAdmin = async (req, res, next) => {
+    let user = await Users.findByPk(req.loggedUserId);
+    console.log(user)
+    if (user.user_type_id === 1) {
+        next();
+    }
+    return res.status(403).send({
+        message: "Require Admin Role!"
+    })
+};
+
+exports.isAdminOrLoggedUser = async (req, res, next) => {
+    let user = await User.findByPk(req.loggedUserId);
+    let role = await user.getRole();
+    if (role.name === "admin" || user.id == req.params.userID)
+        next();
+    return res.status(403).send({
+        message: "Require Admin Role!"
+    });
+};

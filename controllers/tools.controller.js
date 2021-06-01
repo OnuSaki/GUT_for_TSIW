@@ -2,7 +2,7 @@
 const db = require("../models/db.js");
 
 // Call database tables
-const Users = db.users;
+const Tools = db.tools;
 const User_types = db.user_types;
 const User_banned = db.user_banned;
 
@@ -13,5 +13,13 @@ const {
 
 // Function used to get all tools
 exports.getAllTools = (req, res) => {
-    res.status(200).json({message: "hello"})
+    Tools.findAll()
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving tutorials."
+            });
+        })
 }

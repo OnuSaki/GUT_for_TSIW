@@ -6,6 +6,7 @@ let router = express.Router();
 
 // Get the users controller file
 const usersController = require('../controllers/users.controller');
+const authController = require('../controllers/auth.controller');
 
 // Function used to determine the time that it takes to make a request
 router.use((req, res, next) => {
@@ -19,7 +20,7 @@ router.use((req, res, next) => {
 
 // Routes 127.1.0.0:8080/users/
 router.route('/')
-    .get(usersController.getAllUsers)
+    .get(authController.verifyToken, authController.isAdmin, usersController.getAllUsers)
     .post(usersController.createUser)
 
 // Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
