@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         like_desc: {  // Determines if the user gave a like or a deslike
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     }, {

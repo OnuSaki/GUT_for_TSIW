@@ -3,10 +3,10 @@
  * It contains the host server and the credentials to get into the database
  */
 const config = {
-    HOST: process.env.DB_HOST || 'sql11.freemysqlhosting.net',
-    USER: process.env.DB_USER || 'sql11408199',
-    PASSWORD: process.env.DB_PASSWORD || 'ihrIu3b4Tb',
-    DB: process.env.DB_NAME || 'sql11408199',
+    HOST: process.env.DB_HOST,
+    USER: process.env.DB_USER,
+    PASSWORD: process.env.DB_PASS,
+    DB: process.env.DB_NAME,
     dialect: "mysql",
     pool: {
         max: 5,

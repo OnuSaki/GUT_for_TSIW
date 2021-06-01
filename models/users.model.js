@@ -27,12 +27,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        user_type: { // User type (e.g. admin, professor, student)
-            type: DataTypes.STRING,
+        user_type_id: { // User type (e.g. admin, professor, student)
+            type: DataTypes.INTEGER,
             allowNull: false
         },
-        is_banned: {    // Validation if the user is banned
-            type: DataTypes.STRING,
+        banned_id: {    // Validation if the user is banned
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     }, {

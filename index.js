@@ -19,11 +19,14 @@ app.get('/', function (req, res) {
     });
 });
 
-// Call routes 127.1.0.0:8080/users handler
+// Call routes /users handler
 app.use('/users', require('./routes/users.routes'));
 
-// Call routes 127.1.0.0:8080/tools handler
+// Call routes /tools handler
 app.use('/tools', require('./routes/tools.routes'));
+
+// Call routes /login handler
+app.use('/auth', require('./routes/auth.routes'));
 
 // Response to any other request that is not accounted
 app.get('*', function(req, res) {
