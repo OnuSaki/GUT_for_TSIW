@@ -14,14 +14,15 @@ router.use((req, res, next) => {
         const diffSeconds = (Date.now() - start) / 1000;
         console.log(`${req.method} ${req.originalUrl} completed in ${diffSeconds} seconds`);
     });
+    res.header("Access-Control-Allow-Headers","x-access-token, Origin, Content-Type, Accept");
     next()
 })
 
-router.route('/login')
-    .post(authController.login);
+router.route('/signin')
+    .post(authController.signin);
 
-router.route('/register')
-    .post(authController.register);
+router.route('/signup')
+    .post(authController.signup);
 
 
 // Route that responds to any other request that is not accounted
