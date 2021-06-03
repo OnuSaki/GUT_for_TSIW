@@ -10,16 +10,24 @@ const {
 } = require('sequelize');
 
 // Function used to get all users
-exports.getAllUsers = (req, res) => {
-    Users.findAll()
-        .then(data => {
-            res.status(200).json(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        })
+exports.getAllUsers = async (req, res) => {
+    // try {
+    //     Users.findAll()
+    //         .then(data => {
+    //             res.status(200).json(data);
+    //         })
+    // } catch (err) {
+    //     res.status(500).send({
+    //         message: err.message || "Some error occurred while retrieving tutorials."
+    //     });
+    // }
+    try {
+        res.status(200).json("Admin Content.");
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
+    };
 };
 
 // Function used to create a new user

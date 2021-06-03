@@ -117,8 +117,8 @@ exports.verifyToken = (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
     let user = await Users.findByPk(req.loggedUserId);
-    console.log(user)
-    if (user.user_type_id === 1) {
+    console.log(user.user_type_id)
+    if (user.user_type_id == 1) {
         next();
     }
     return res.status(403).send({
@@ -127,9 +127,8 @@ exports.isAdmin = async (req, res, next) => {
 };
 
 exports.isAdminOrLoggedUser = async (req, res, next) => {
-    let user = await User.findByPk(req.loggedUserId);
-    let role = await user.getRole();
-    if (role.name === "admin" || user.id == req.params.userID)
+    let user = await Users.findByPk(req.loggedUserId);
+    if (user.user_type_id === 1 || user.id == req.params.userID)
         next();
     return res.status(403).send({
         message: "Require Admin Role!"
