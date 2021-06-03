@@ -6,6 +6,7 @@ let router = express.Router();
 
 // Get the tools controller file
 const toolsController = require('../controllers/tools.controller');
+const authController = require('../controllers/auth.controller')
 
 // Function used to determine the time that it takes to make a request
 router.use((req, res, next) => {
@@ -20,6 +21,9 @@ router.use((req, res, next) => {
 // Routes 127.1.0.0:8080/tools/
 router.route('/')
     .get(toolsController.getAllTools)
+
+router.route('/:toolId')
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, toolsController.likeTool)
 
 // Route that responds to any other request that is not accounted
 router.all('*', function (req, res) {

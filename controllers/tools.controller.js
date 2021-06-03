@@ -3,8 +3,8 @@ const db = require("../models/db.js");
 
 // Call database tables
 const Tools = db.tools;
-const User_types = db.user_types;
-const User_banned = db.user_banned;
+const UserToolLike = db.user_tool_like;
+const ToolComment = db.tool_comments;
 
 // Sequelize operator
 const {
@@ -22,4 +22,8 @@ exports.getAllTools = (req, res) => {
                 message: err.message || "Some error occurred while retrieving tutorials."
             });
         })
+}
+
+exports.likeTool = (req, res) => {
+    
 }

@@ -20,11 +20,12 @@ router.use((req, res, next) => {
 
 // Routes 127.1.0.0:8080/users/
 router.route('/')
-    .get(authController.verifyToken, authController.isAdminOrLoggedUser, usersController.getAllUsers)
-    .post(usersController.createUser)
+    .get(authController.verifyToken, authController.isAdmin, usersController.getAllUsers)
+    .post(authController.verifyToken, authController.isAdmin, usersController.createUser)
 
 // Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
 router.route('/:userId')
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, usersController.getLoggedUser)
     .delete(usersController.deleteUser)
     .put(usersController.updateUser)
 

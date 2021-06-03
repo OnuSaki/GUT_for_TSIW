@@ -120,6 +120,7 @@ exports.isAdmin = async (req, res, next) => {
     console.log(user.user_type_id)
     if (user.user_type_id == 1) {
         next();
+        return;
     }
     return res.status(403).send({
         message: "Require Admin Role!"
@@ -128,8 +129,10 @@ exports.isAdmin = async (req, res, next) => {
 
 exports.isAdminOrLoggedUser = async (req, res, next) => {
     let user = await Users.findByPk(req.loggedUserId);
-    if (user.user_type_id === 1 || user.id == req.params.userID)
+    if (user.user_type_id === 1 || user.id == req.params.userID){
         next();
+        return;
+    }
     return res.status(403).send({
         message: "Require Admin Role!"
     });
