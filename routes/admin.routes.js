@@ -21,10 +21,24 @@ router.use((req, res, next) => {
 })
 
 router.route('/users')
-    .post(authController.signin);
+    .get(authController.verifyToken, authController.isAdmin, usersController.getAllUsers)
+    .post(authController.verifyToken, authController.isAdmin, usersController.createUser)
+
+router.route('/users/:userId')
+    .delete(authController.verifyToken, authController.isAdmin, usersController.deleteUser)
+    .put(authController.verifyToken, authController.isAdmin, usersController.updateUser)
 
 router.route('/tools')
-    .post(authController.signup);
+    .get(authController.verifyToken, authController.isAdmin, toolsController.getAllTools)
+    .post(authController.verifyToken, authController.isAdmin, toolsController.createTool)
+
+router.route('/tools/:toolId')
+    .get(authController.verifyToken, authController.isAdmin, toolsController.getOneTool)
+    .put(authController.verifyToken, authController.isAdmin, toolsController.updateTool)
+    .delete(authController.verifyToken, authController.isAdmin, toolsController.deleteTool)
+
+router.route('/tools/comments')
+    .get(authController.verifyToken, authController.isAdmin, toolsController.getOneTool)
 
 router.route('/subjects')
     .post(authController.signup);

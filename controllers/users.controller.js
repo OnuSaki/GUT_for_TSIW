@@ -26,10 +26,10 @@ exports.getAllUsers = async (req, res) => {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 exports.getLoggedUser = async (req, res) => {
     Users.findOne({
-            where: {
-                user_id: req.params.userId
-            }
-        })
+        where: {
+            user_id: req.params.userId
+        }
+    })
         .then(data => {
             res.status(200).json(data);
         })
@@ -41,64 +41,93 @@ exports.getLoggedUser = async (req, res) => {
 }
 
 // Function used to create a new user
-exports.createUser = (req, res) => {
-    Users.create(req.body)
-        .then(data => {
-            res.status(201).json({
-                message: "New User created.",
-                location: "/users/" + data.user_id
-            });
-
+exports.createUser = async (req, res) => {
+    let user = await Users.findOne({where: {user_email: req.body.user_email}})
+    console.log(user)
+    if (user === null) {
+        Users.create({
+            user_name: req.body.user_name,
+            user_email: req.body.user_email,
+            user_password: bcrypt.hashSync(req.body.user_password, 8), // generates hash to password
+            user_type_id: req.body.user_type_id,
+            banned_id: 1
         })
-        .catch(err => {
-            // Tutorial model as validation for the title column (not null)
-            if (err.name === 'SequelizeValidationError')
-                res.status(400).json({
-                    message: err.errors[0].message
+            .then(data => {
+                res.status(201).json({
+                    message: "New User created.",
+                    location: "/users/" + data.user_id
                 });
-            else
-                res.status(500).json({
-                    message: err.message || "Some error occurred while creating the User."
-                });
-        });
+
+            })
+            .catch(err => {
+                // Tutorial model as validation for the title column (not null)
+                if (err.name === 'SequelizeValidationError')
+                    res.status(400).json({
+                        message: err.errors[0].message
+                    });
+                else
+                    res.status(500).json({
+                        message: err.message || "Some error occurred while creating the User."
+                    });
+            });
+    } else {
+        res.status(200).json("Email is already in use")
+    }
+
 };
 
 // Function used to delete a user based on his id
-exports.deleteUser = (req, res) => {
-    Users.destroy({
+exports.deleteUser = async (req, res) => {
+    let user = await Users.findByPk(req.params.userId)
+    if (user.user_type_id != 1) {
+        Users.destroy({
             where: {
                 user_id: req.params.userId
             }
         })
-        .then(num => {
-            if (num == 0) {
+            .then(num => {
+                if (num == 0) {
+                    res.status(200).json({
+                        message: `No User with id: ${req.params.userId} was found on the database.`
+                    });
+                    return;
+                }
                 res.status(200).json({
-                    message: `No User with id: ${req.params.userId} was found on the database.`
+                    message: "User deleted with success."
                 });
-                return;
-            }
-            res.status(200).json({
-                message: "User deleted with success."
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || 'Some error ocurred while trying to delete user.'
             })
-        })
+            .catch(err => {
+                res.status(500).send({
+                    message: err.message || 'Some error ocurred while trying to delete user.'
+                })
+            })
+    } else {
+        res.status(200).json({ message: "Can't delete an admin user" })
+    }
 };
 
 // Function used to update a user based on his id
 exports.updateUser = async (req, res) => {
+    const user = await Users.findByPk(req.loggedUserId)
+    let user_type; let banned;
+    if (user.user_type_id === 1) {
+        user_type = req.body.user_type_id
+        banned = req.body.banned_id
+    } else {
+        user_type = user.user_type_id
+        banned = user.banned_id
+    }
     Users.update({
-            user_name: req.body.user_name,
-            user_email: req.body.user_email,
-            user_password: bcrypt.hashSync(req.body.user_password, 8)
-        }, {
-            where: {
-                user_id: req.params.userId
-            }
-        })
+        user_name: req.body.user_name,
+        user_email: req.body.user_email,
+        user_password: bcrypt.hashSync(req.body.user_password, 8),
+        user_type_id: user_type,
+        banned_id: banned
+    }, {
+        where: {
+            user_id: req.params.userId
+        }
+    })
         .then(data => {
             if (data[0] === 0) {
                 res.status(200).json({

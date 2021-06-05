@@ -18,10 +18,6 @@ router.use((req, res, next) => {
     next()
 })
 
-router.route('/')
-    .get(usersController.getAllUsers)
-
-
 // Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
 router.route('/:userId')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, usersController.getLoggedUser)

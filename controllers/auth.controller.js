@@ -81,7 +81,7 @@ exports.signup = async (req, res) => {
             user_name: req.body.user_name,
             user_email: req.body.user_email,
             user_password: bcrypt.hashSync(req.body.user_password, 8), // generates hash to password
-            user_type_id: 1,
+            user_type_id: 3,
             banned_id: 1
         });
 
@@ -118,7 +118,7 @@ exports.verifyToken = (req, res, next) => {
 exports.isAdmin = async (req, res, next) => {
     let user = await Users.findByPk(req.loggedUserId);
     console.log(user.user_type_id)
-    if (user.user_type_id == 1) {
+    if (user.user_type_id === 1) {
         next();
         return;
     }
