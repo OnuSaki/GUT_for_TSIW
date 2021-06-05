@@ -23,7 +23,12 @@ router.route('/')
     .get(toolsController.getAllTools)
 
 router.route('/:toolId')
-    .get(authController.verifyToken, authController.isAdminOrLoggedUser, toolsController.likeTool)
+    .get(toolsController.getOneTool)
+    .post(authController.verifyToken, authController.isAdminOrLoggedUser, toolsController.leaveLike)
+
+router.route('/:toolId/comments')
+    .get(toolsController.getComments)
+    .post(authController.verifyToken, authController.isAdminOrLoggedUser, toolsController.createComment)
 
 // Route that responds to any other request that is not accounted
 router.all('*', function (req, res) {

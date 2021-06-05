@@ -4,7 +4,8 @@ const express = require('express');
 // Call express router
 let router = express.Router();
 
-// Get the users controller file
+// Get the tools controller file
+const toolsController = require('../controllers/tools.controller');
 const usersController = require('../controllers/users.controller');
 const authController = require('../controllers/auth.controller');
 
@@ -15,24 +16,26 @@ router.use((req, res, next) => {
         const diffSeconds = (Date.now() - start) / 1000;
         console.log(`${req.method} ${req.originalUrl} completed in ${diffSeconds} seconds`);
     });
+    res.header("Access-Control-Allow-Headers", "x-access-token, Origin, Content-Type, Accept");
     next()
 })
 
-router.route('/')
-    .get(usersController.getAllUsers)
+router.route('/users')
+    .post(authController.signin);
 
+router.route('/tools')
+    .post(authController.signup);
 
-// Routes 127.1.0.0:8080/users/:userId, routes that need the user ID
-router.route('/:userId')
-    .get(authController.verifyToken, authController.isAdminOrLoggedUser, usersController.getLoggedUser)
-    .put(authController.verifyToken, authController.isAdminOrLoggedUser, usersController.updateUser)
+router.route('/subjects')
+    .post(authController.signup);
+
 
 // Route that responds to any other request that is not accounted
 router.all('*', function (req, res) {
     res.status(404).json({
-        message: 'Users: what???'
+        message: 'Auth: what???'
     });
 })
 
-// Export routes router
+// Export tools router
 module.exports = router;

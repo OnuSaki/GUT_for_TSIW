@@ -129,7 +129,7 @@ exports.isAdmin = async (req, res, next) => {
 
 exports.isAdminOrLoggedUser = async (req, res, next) => {
     let user = await Users.findByPk(req.loggedUserId);
-    if (user.user_type_id === 1 || user.id == req.params.userID){
+    if (user.user_type_id === 1 || user.user_id === parseInt(req.params.userId)){
         next();
         return;
     }

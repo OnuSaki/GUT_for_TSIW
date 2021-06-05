@@ -1,5 +1,6 @@
 // Get database info
 const db = require("../models/db.js");
+const bcrypt = require("bcryptjs");
 
 // Call database table
 const Users = db.users;
@@ -24,7 +25,11 @@ exports.getAllUsers = async (req, res) => {
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 exports.getLoggedUser = async (req, res) => {
-    Users.findOne({where: {user_id: req.params.userId}})
+    Users.findOne({
+            where: {
+                user_id: req.params.userId
+            }
+        })
         .then(data => {
             res.status(200).json(data);
         })
@@ -84,13 +89,11 @@ exports.deleteUser = (req, res) => {
 };
 
 // Function used to update a user based on his id
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
     Users.update({
             user_name: req.body.user_name,
             user_email: req.body.user_email,
-            user_password: req.body.user_password,
-            user_type_id: req.body.user_type_id,
-            banned_id: req.body.banned_id
+            user_password: bcrypt.hashSync(req.body.user_password, 8)
         }, {
             where: {
                 user_id: req.params.userId

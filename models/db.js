@@ -42,6 +42,13 @@ db.tools = require('./tools.model')(sequelize, DataTypes);
 db.user_tool_like = require('./user_tool_like.model')(sequelize, DataTypes);
 db.users = require('./users.model')(sequelize, DataTypes);
 
+db.comments.belongsToMany(db.tools, {
+    through: db.tool_comments
+});
+db.tools.belongsToMany(db.comments, {
+    through: db.tool_comments
+});
+
 
 //* Syncronize database, only used when there's changes to it
 // db.sequelize.sync()

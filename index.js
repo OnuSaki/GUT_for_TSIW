@@ -28,6 +28,8 @@ app.use('/tools', require('./routes/tools.routes'));
 // Call routes /login handler
 app.use('/auth', require('./routes/auth.routes'));
 
+app.use('/admin', require('./routes/admin.routes'));
+
 // Response to any other request that is not accounted
 app.get('*', function(req, res) {
     res.status(404).json({message: 'WHAAT??'});
