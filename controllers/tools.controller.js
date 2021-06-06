@@ -8,11 +8,6 @@ const ToolComments = db.tool_comments;
 const UserToolLike = db.user_tool_like;
 const Subjects = db.subjects;
 
-// Sequelize operator
-const {
-    Op
-} = require('sequelize');
-
 // Function used to get all tools
 exports.getAllTools = (req, res) => {
     Tools.findAll()
@@ -26,6 +21,7 @@ exports.getAllTools = (req, res) => {
         })
 }
 
+// Function used to get one tool
 exports.getOneTool = (req, res) => {
     Tools.findOne({
             where: {
@@ -48,10 +44,11 @@ exports.getOneTool = (req, res) => {
         })
 }
 
+// Function used to create a tool
 exports.createTool = (req, res) => {
     Tools.create({
             tool_name: req.body.tool_name,
-            toll_desc: req.body.tool_desc, // generates hash to password
+            toll_desc: req.body.tool_desc,
             tool_state_id: 1
         })
         .then(data => {
@@ -62,7 +59,6 @@ exports.createTool = (req, res) => {
 
         })
         .catch(err => {
-            // Tutorial model as validation for the title column (not null)
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({
                     message: err.errors[0].message
@@ -74,6 +70,7 @@ exports.createTool = (req, res) => {
         });
 }
 
+// Function used to update a tool
 exports.updateTool = (req, res) => {
     Tools.update({
             tool_name: req.body.tool_name,
@@ -102,6 +99,7 @@ exports.updateTool = (req, res) => {
         });
 }
 
+// Function used to delete a tool
 exports.deleteTool = (req, res) => {
     Tools.destroy({
             where: {
@@ -126,6 +124,7 @@ exports.deleteTool = (req, res) => {
         })
 }
 
+// Function used to create a comment
 exports.createComment = (req, res) => {
     Comments.create({
             comment_desc: req.body.comment
@@ -144,7 +143,6 @@ exports.createComment = (req, res) => {
                     return;
                 })
                 .catch(err => {
-                    // Tutorial model as validation for the title column (not null)
                     if (err.name === 'SequelizeValidationError')
                         res.status(400).json({
                             message: err.errors[0].message
@@ -156,7 +154,6 @@ exports.createComment = (req, res) => {
                 });
         })
         .catch(err => {
-            // Tutorial model as validation for the title column (not null)
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({
                     message: err.errors[0].message
@@ -168,6 +165,7 @@ exports.createComment = (req, res) => {
         });
 };
 
+// Function user for a user to give a like/deslike to a tool
 exports.leaveLike = (req, res) => {
     UserToolLike.findOne({
             where: {
@@ -186,7 +184,6 @@ exports.leaveLike = (req, res) => {
                         res.status(200).json(data2);
                     })
                     .catch(err => {
-                        // Tutorial model as validation for the title column (not null)
                         if (err.name === 'SequelizeValidationError')
                             res.status(400).json({
                                 message: err.errors[0].message
@@ -202,7 +199,6 @@ exports.leaveLike = (req, res) => {
             })
         })
         .catch(err => {
-            // Tutorial model as validation for the title column (not null)
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({
                     message: err.errors[0].message
@@ -214,6 +210,7 @@ exports.leaveLike = (req, res) => {
         });
 };
 
+// Function used to get all comments
 exports.getComments = (req, res) => {
     Comments.findAll()
         .then(data => {
@@ -226,6 +223,7 @@ exports.getComments = (req, res) => {
         })
 }
 
+// Function used to delete a comment
 exports.deleteComment = (req, res) => {
     ToolComments.destroy({
             where: {
@@ -255,6 +253,7 @@ exports.deleteComment = (req, res) => {
         })
 }
 
+// Function used to get all subjects
 exports.getAllSubjects = (req, res) => {
     Subjects.findAll()
         .then(data => {
@@ -267,9 +266,10 @@ exports.getAllSubjects = (req, res) => {
         })
 }
 
+// Function used to create a subject
 exports.createSubject = async (req, res) => {
     let sub = await Subjects.findOne({where: {subject_desc: req.body.subject_desc}})
-    if (!sub) {
+    if (sub === null) {
         Subjects.create({
             subject_desc: req.body.subject_desc,
             subject_name: req.body.subject_name
@@ -297,6 +297,7 @@ exports.createSubject = async (req, res) => {
     
 }
 
+// Function used to delete a subject
 exports.deleteSubject = (req, res) => {
     Subjects.destroy({
         where: {

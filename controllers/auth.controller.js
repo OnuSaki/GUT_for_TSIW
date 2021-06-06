@@ -7,7 +7,6 @@ const config = require("../config/auth.config.js");
 // Call database tables
 const Users = db.users;
 
-// Function used to get all tools
 exports.signin = async (req, res) => {
     try {
         let user = await Users.findOne({
@@ -18,14 +17,12 @@ exports.signin = async (req, res) => {
         if (!user) return res.status(404).json({
             message: "User Not found."
         });
-        // tests a string (password in body) against a hash (password in database)
         const passwordIsValid = await bcrypt.compareSync(
             req.body.user_password, user.user_password.toString()
         );
 
         if (
             !passwordIsValid
-            // req.body.user_password != user.user_password
         ) {
             return res.status(401).json({
                 accessToken: null,
@@ -33,11 +30,10 @@ exports.signin = async (req, res) => {
             });
         }
 
-        // sign the given payload (user ID) into a JWT payload – builds JWT token, using secret key
         const token = jwt.sign({
             id: user.user_id
         }, config.secret, {
-            expiresIn: 86400 // 24 hours
+            expiresIn: 86400
         });
 
         let role;
@@ -48,7 +44,6 @@ exports.signin = async (req, res) => {
         else
             role = "aluno"
 
-        // Return
         return res.status(200).json({
             id: user.user_id,
             username: user.user_name,
@@ -66,7 +61,6 @@ exports.signin = async (req, res) => {
 
 exports.signup = async (req, res) => {
     try {
-        // check duplicate username
         let user = await Users.findOne({
             where: {
                 user_email: req.body.user_email
@@ -76,11 +70,10 @@ exports.signup = async (req, res) => {
             return res.status(400).json({
                 message: "Failed! Email is already in use!"
             });
-        // save User to database
         user = await Users.create({
             user_name: req.body.user_name,
             user_email: req.body.user_email,
-            user_password: bcrypt.hashSync(req.body.user_password, 8), // generates hash to password
+            user_password: bcrypt.hashSync(req.body.user_password, 8),
             user_type_id: 3,
             banned_id: 1
         });
@@ -102,14 +95,14 @@ exports.verifyToken = (req, res, next) => {
             message: "No token provided!"
         });
     }
-    // verify request token given the JWT secret key
+
     jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
             return res.status(401).send({
                 message: "Unauthorized!"
             });
         }
-        req.loggedUserId = decoded.id; // save user ID for future verifications
+        req.loggedUserId = decoded.id;
         next();
     });
 };
