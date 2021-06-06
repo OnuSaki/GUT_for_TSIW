@@ -32,16 +32,27 @@ router.route('/tools')
     .get(authController.verifyToken, authController.isAdmin, toolsController.getAllTools)
     .post(authController.verifyToken, authController.isAdmin, toolsController.createTool)
 
+router.route('/tools/comments')
+    .get(authController.verifyToken, authController.isAdmin, toolsController.getComments)
+
+router.route('/tools/comments/:commentId')
+    .delete(authController.verifyToken, authController.isAdmin, toolsController.deleteComment)
+
 router.route('/tools/:toolId')
     .get(authController.verifyToken, authController.isAdmin, toolsController.getOneTool)
     .put(authController.verifyToken, authController.isAdmin, toolsController.updateTool)
     .delete(authController.verifyToken, authController.isAdmin, toolsController.deleteTool)
 
-router.route('/tools/comments')
-    .get(authController.verifyToken, authController.isAdmin, toolsController.getOneTool)
+
+router.route('/tools/:toolId/comments')
+    .post(authController.verifyToken, authController.isAdmin, toolsController.createComment)
 
 router.route('/subjects')
-    .post(authController.signup);
+    .get(authController.verifyToken, authController.isAdmin, toolsController.getAllSubjects)
+    .post(authController.verifyToken, authController.isAdmin, toolsController.createSubject)
+
+router.route('/subjects/:subjectId')
+    .delete(authController.verifyToken, authController.isAdmin, toolsController.deleteSubject);
 
 
 // Route that responds to any other request that is not accounted

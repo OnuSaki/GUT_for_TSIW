@@ -5,11 +5,6 @@ const bcrypt = require("bcryptjs");
 // Call database table
 const Users = db.users;
 
-// Sequelize operator
-const {
-    Op
-} = require('sequelize');
-
 // Function used to get all users
 exports.getAllUsers = async (req, res) => {
     Users.findAll()
@@ -18,24 +13,28 @@ exports.getAllUsers = async (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
+                message: err.message || "Some error occurred while retrieving Users."
             });
         })
 };
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 exports.getLoggedUser = async (req, res) => {
+    let user = await Users.findByPk(req.loggedUserId)
     Users.findOne({
         where: {
             user_id: req.params.userId
         }
     })
         .then(data => {
-            res.status(200).json(data);
+            if (user.user_id === data.user_id || user.user_type_id === 1) {
+                res.status(200).json(data);
+                return;
+            }
+            res.status(400).json({messge: "User doesn't have permission"})
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
+                message: err.message || "Some error occurred while retrieving logged User."
             });
         })
 }
